@@ -56,5 +56,6 @@ function clearEntries(){if(confirm('Delete all locally saved entries?')){localSt
 function makeReply(){const m=$('customerMessage').value.trim();if(!m){put('replyOutput','Paste the customer message first.');return}const t=$('replyTone').value;put('replyOutput',(t==='Short and direct'?'Thanks for reaching out. ':'Hi, thanks for contacting us. ')+(t==='Apologetic and helpful'?'I’m sorry for any inconvenience. ':'')+'I appreciate your message about: “'+m+'”\n\nI’ll review the details and get back to you with the next steps. Please let me know if there is anything else I should know.\n\nEdit this draft before sending.')}
 renderEntries();
 </script>
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(err => console.warn("Offline support unavailable:", err))); }</script>
 </body>
 </html>
