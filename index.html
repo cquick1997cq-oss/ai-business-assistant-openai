@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="A simple toolkit to plan, market, and track a small business.">
+<title>BusinessPilot — AI Business Assistant</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--panel2:#19263b;--text:#edf3ff;--muted:#9eacc3;--accent:#70d6b2;--line:#2a3a52}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:24px max(18px,calc((100% - 1050px)/2));background:#101827;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:1.5rem}header p{margin:4px 0 0;color:var(--muted)}
+main{max-width:1050px;margin:auto;padding:20px 16px 60px}.tabs{display:flex;gap:8px;overflow:auto;padding:4px 0 16px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--panel2);color:var(--text)}
+button.active,.primary{background:var(--accent);color:#082019;border-color:var(--accent);font-weight:700}
+.panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}.panel.active{display:block}
+h2{margin:0 0 12px;font-size:1.25rem}h3{margin:18px 0 8px}p{color:var(--muted)}
+label{display:block;margin:12px 0 6px;color:#cbd7e9;font-weight:600}
+input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#0b1424;color:var(--text);font:inherit}
+textarea{min-height:110px;resize:vertical}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.output{white-space:pre-wrap;background:#0b1424;border:1px dashed var(--line);border-radius:10px;padding:14px;margin-top:14px;min-height:52px}
+.stat{font-size:1.7rem;font-weight:750;color:var(--accent)}.small{font-size:.88rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin-top:12px}td,th{text-align:left;padding:9px;border-bottom:1px solid var(--line)}
+footer{max-width:1050px;margin:auto;padding:0 16px 30px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header><h1>BusinessPilot</h1><p>Your simple business planning and management workspace</p></header>
+<main>
+<nav class="tabs" aria-label="Business tools">
+<button class="active" data-tab="home">Dashboard</button><button data-tab="ideas">Business ideas</button><button data-tab="marketing">Marketing</button><button data-tab="plan">Business plan</button><button data-tab="money">Money tracker</button><button data-tab="customers">Customer replies</button>
+</nav>
+<section class="panel active" id="home"><h2>Business dashboard</h2><p>Start with one small step. Choose a tool above to build your business.</p><div class="grid"><div class="panel"><div class="small">Income recorded</div><div class="stat" id="incomeTotal">$0.00</div></div><div class="panel"><div class="small">Expenses recorded</div><div class="stat" id="expenseTotal">$0.00</div></div><div class="panel"><div class="small">Net amount</div><div class="stat" id="netTotal">$0.00</div></div></div><p class="small">Your entries are saved only in this browser on this device. They are not uploaded to an account.</p></section>
+<section class="panel" id="ideas"><h2>Business idea starter</h2><p>Answer these questions to get practical ideas you can research. This first version uses a built-in idea guide and does not call an AI service.</p><label for="skills">What are you good at or interested in?</label><input id="skills" placeholder="e.g. fixing things, writing, cleaning"><label for="budget">Starting budget</label><select id="budget"><option value="0"> $0 / free to start</option><option value="100">Under $100</option><option value="500">Under $500</option><option value="1000">$500–$1,000</option></select><label for="hours">Hours available each week</label><select id="hours"><option>1–5</option><option>5–10</option><option>10–20</option><option>20+</option></select><div class="actions"><button class="primary" onclick="makeIdeas()">Suggest starting points</button></div><div class="output" id="ideaOutput">Your suggested starting points will appear here.</div></section>
+<section class="panel" id="marketing"><h2>Marketing post creator</h2><label for="businessName">Business or product name</label><input id="businessName" placeholder="Your business name"><label for="offer">What are you offering?</label><textarea id="offer" placeholder="Describe the service, product, price, or special offer"></textarea><label for="audience">Who is it for?</label><input id="audience" placeholder="e.g. local homeowners"><div class="actions"><button class="primary" onclick="makePost()">Create a post draft</button></div><div class="output" id="postOutput">Your draft will appear here.</div></section>
+<section class="panel" id="plan"><h2>One-page business plan</h2><label for="planName">Business idea</label><input id="planName" placeholder="What will you sell or provide?"><label for="problem">Customer problem you solve</label><textarea id="problem"></textarea><label for="customer">Target customer</label><input id="customer"><label for="price">How will you charge?</label><input id="price" placeholder="e.g. $40 per visit"><label for="reach">How will customers find you?</label><textarea id="reach" placeholder="e.g. referrals, local groups, flyers"></textarea><div class="actions"><button class="primary" onclick="makePlan()">Build my plan</button></div><div class="output" id="planOutput">Your plan will appear here.</div></section>
+<section class="panel" id="money"><h2>Income and expense tracker</h2><div class="grid"><div><label for="entryType">Entry type</label><select id="entryType"><option value="income">Income</option><option value="expense">Expense</option></select></div><div><label for="amount">Amount ($)</label><input id="amount" type="number" min="0" step=".01" placeholder="0.00"></div></div><label for="note">Description</label><input id="note" placeholder="e.g. customer payment or supplies"><div class="actions"><button class="primary" onclick="addEntry()">Save entry</button></div><div id="entries"></div></section>
+<section class="panel" id="customers"><h2>Customer reply helper</h2><label for="customerMessage">Paste the customer's message</label><textarea id="customerMessage" placeholder="Paste a customer question or request"></textarea><label for="replyTone">Reply style</label><select id="replyTone"><option>Friendly and professional</option><option>Short and direct</option><option>Apologetic and helpful</option></select><div class="actions"><button class="primary" onclick="makeReply()">Draft a reply</button></div><div class="output" id="replyOutput">Your reply draft will appear here.</div></section>
+</main>
+<footer>BusinessPilot starter version • No account or paid API required • Verify costs, local rules, and customer demand before spending money.</footer>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===btn.dataset.tab));}));
+function put(id,text){$(id).textContent=text}
+function makeIdeas(){const s=$('skills').value.trim()||'your existing skills';const b=Number($('budget').value);let ideas=b===0?['Offer a local service using tools you already own','Sell a simple digital service such as basic design or writing','Resell unused items you already own']:['Offer a local service and spend only on essential supplies','Create a small online service portfolio','Test a focused resale or handmade-product offer'];put('ideaOutput','Based on '+s+':\n\n'+ideas.map((x,i)=>(i+1)+'. '+x).join('\n')+'\n\nNext step: speak with 5 potential customers before buying supplies or paying for advertising. These are starting points, not guaranteed income.')}
+function makePost(){const n=$('businessName').value.trim()||'Our business';const o=$('offer').value.trim()||'our services';const a=$('audience').value.trim()||'our community';put('postOutput','📣 Looking for '+o+'?\n\n'+n+' is here to help '+a+'. Send us a message to learn more or ask for a quote. We look forward to hearing from you!\n\nPlease edit this draft so every claim, price, and availability detail is accurate.')}
+function makePlan(){put('planOutput','BUSINESS: '+($('planName').value||'Not specified')+'\n\nCUSTOMER NEED\n'+($('problem').value||'Add the problem you solve.')+'\n\nTARGET CUSTOMER\n'+($('customer').value||'Define your ideal customer.')+'\n\nPRICING\n'+($('price').value||'Research a fair price.')+'\n\nCUSTOMER ACQUISITION\n'+($('reach').value||'Choose one low-cost way to reach customers.')+'\n\nFIRST VALIDATION STEP\nTalk to 5 potential customers and try to secure one paid test job before investing heavily.')}
+function getEntries(){try{return JSON.parse(localStorage.getItem('bp_entries')||'[]')}catch{return []}}
+function saveEntries(a){localStorage.setItem('bp_entries',JSON.stringify(a));renderEntries()}
+function addEntry(){const amount=Number($('amount').value);if(!Number.isFinite(amount)||amount<=0){alert('Enter an amount greater than zero.');return}const a=getEntries();a.unshift({type:$('entryType').value,amount,note:$('note').value.trim(),date:new Date().toLocaleDateString()});saveEntries(a);$('amount').value='';$('note').value=''}
+function money(n){return n.toLocaleString(undefined,{style:'currency',currency:'USD'})}
+function renderEntries(){const a=getEntries();const inc=a.filter(x=>x.type==='income').reduce((s,x)=>s+x.amount,0);const exp=a.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amount,0);put('incomeTotal',money(inc));put('expenseTotal',money(exp));put('netTotal',money(inc-exp));$('entries').innerHTML='<h3>Recent entries</h3>'+(a.length?'<table><tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th></tr>'+a.map(x=>'<tr><td>'+escapeHtml(x.date)+'</td><td>'+escapeHtml(x.type)+'</td><td>'+escapeHtml(x.note)+'</td><td>'+money(x.amount)+'</td></tr>').join('')+'</table>':'<p>No entries yet.</p>')+'<div class="actions"><button onclick="clearEntries()">Clear all entries</button></div>'}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function clearEntries(){if(confirm('Delete all locally saved entries?')){localStorage.removeItem('bp_entries');renderEntries()}}
+function makeReply(){const m=$('customerMessage').value.trim();if(!m){put('replyOutput','Paste the customer message first.');return}const t=$('replyTone').value;put('replyOutput',(t==='Short and direct'?'Thanks for reaching out. ':'Hi, thanks for contacting us. ')+(t==='Apologetic and helpful'?'I’m sorry for any inconvenience. ':'')+'I appreciate your message about: “'+m+'”\n\nI’ll review the details and get back to you with the next steps. Please let me know if there is anything else I should know.\n\nEdit this draft before sending.')}
+renderEntries();
+</script>
+</body>
+</html>
