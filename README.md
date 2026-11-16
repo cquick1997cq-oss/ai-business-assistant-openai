@@ -37,3 +37,10 @@ You can open the published site on an Android phone or computer. On Android, use
 1. Test and improve the starter app.
 2. Add secure AI features through a server-side service so secret API keys are never exposed in browser code.
 3. Add optional accounts, cloud sync, and export features.
+
+
+## Phase 2 — Optional live AI
+
+A secure Cloudflare Worker backend is provided in `worker/`. Setup steps are in [PHASE2_SETUP.md](./PHASE2_SETUP.md). The app's **AI assistant** tab accepts the Worker URL; the Gemini API key must be stored as a Cloudflare Worker secret, never in the browser or repository.
+
+Live AI is optional. The existing built-in tools continue to work without it.
