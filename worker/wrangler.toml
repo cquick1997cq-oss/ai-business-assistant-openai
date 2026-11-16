@@ -1,0 +1,7 @@
+name = "businesspilot-ai"
+main = "src/index.js"
+compatibility_date = "2026-11-16"
+
+[vars]
+ALLOWED_ORIGIN = "https://cquick1997cq-oss.github.io"
+GEMINI_MODEL = "gemini-2.5-flash"
